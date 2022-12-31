@@ -63,9 +63,9 @@ namespace It_s_snowing.Properties {
         /// <summary>
         ///   System.Drawing.Bitmap türünde yerelleştirilmiş bir kaynak arar.
         /// </summary>
-        internal static System.Drawing.Bitmap flake {
+        internal static System.Drawing.Bitmap Kar {
             get {
-                object obj = ResourceManager.GetObject("flake", resourceCulture);
+                object obj = ResourceManager.GetObject("Kar", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

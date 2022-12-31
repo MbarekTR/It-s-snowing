@@ -16,12 +16,12 @@ namespace It_s_snowing
 
         private void CreateSnow()
         {
-            this.BackgroundImageLayout= ImageLayout.Zoom;
+            this.BackgroundImageLayout = ImageLayout.Zoom;
             this.Location = new Point(rSnow.Next(-Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Width), rSnow.Next(-Screen.PrimaryScreen.Bounds.Height, Screen.PrimaryScreen.Bounds.Height));
 
             this.MinimumSize = new Size(7, 7);
             this.Size = new Size(10, 10);
-            this.BackgroundImage = Properties.Resources.flake;
+            this.BackgroundImage = Properties.Resources.Kar;
         }
 
         private void MoveSnow()

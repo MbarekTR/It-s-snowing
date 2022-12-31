@@ -51,6 +51,7 @@ namespace It_s_snowing
             else
             {
                 SnowPanel.Visible = false;
+                SnowPanel.Height = 0;
             }
         }
     }

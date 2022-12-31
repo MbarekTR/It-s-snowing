@@ -1,6 +1,6 @@
 ﻿using It_s_snowing.Properties;
 using System;
-using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace It_s_snowing
@@ -8,13 +8,25 @@ namespace It_s_snowing
     public partial class Control : Form
     {
         private readonly Main frm = new Main();
-        private string ButtonTextHide = "Hide", ButtonTextShow = "Show";
+
+        #region private
+
+        [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
+        private extern static void ReleaseCapture();
+        [DllImport("user32.DLL", EntryPoint = "SendMessage")]
+        private extern static void SendMessage(System.IntPtr hWnd, int wMsg, int wParam, int lParam);
+
+        #endregion
+
         public Control()
         {
             InitializeComponent();
-            
+
+            #region Settings
+
             SnowThickness_Button0.Checked = Settings.SnowThickness;
             LoadSnow_Button1.Checked = Settings.LoadSnow;
+            Snow_Button.Checked = Settings.LoadSnow;
             Language_Button2.Checked = Settings.Language;
 
             if (Settings.Language == true)
@@ -22,34 +34,17 @@ namespace It_s_snowing
                 SnowThickness_Label.Text = "Kar Kalınlığı";
                 LoadSnow_Label.Text = "Açılışta başla";
                 Language_Label.Text = "Dil";
-                ButtonTextHide = "Gizle";
-                ButtonTextShow = "Göster";
+                Snow_Label.Text = "Kar";
+
+                Reload_Button.Text = "Yenile";
             }
 
             if (Settings.LoadSnow == true)
             {
                 frm.Show();
-                Start_Button.Text = ButtonTextHide;
-                Start_Button.BackColor = Color.FromArgb(64, 0, 0);
-            }
-        }
-
-        private void Start_Button_Click(object sender, EventArgs e)
-        {
-            if (Start_Button.Text == ButtonTextShow)
-            {
-                frm.Show();
-                Start_Button.Text = ButtonTextHide;
-                Start_Button.BackColor = Color.FromArgb(64, 0, 0);
-
-            }
-            else
-            {
-                frm.Hide();
-                Start_Button.Text = ButtonTextShow;
-                Start_Button.BackColor = Color.FromArgb(0, 64, 0);
             }
 
+            #endregion
         }
 
         private void Save(object sender, EventArgs e)
@@ -59,15 +54,46 @@ namespace It_s_snowing
 
             if (toggleButton == sender)
             {
-                if (toggleButton.CheckState == CheckState.Checked)
-                {
-                    Settings.SaveSettings(number, true);
-                }
-                else
-                {
-                    Settings.SaveSettings(number, false);
-                }
+                if (toggleButton.CheckState == CheckState.Checked) Settings.SaveSettings(number, true);
+                else Settings.SaveSettings(number, false);
             }
+
+            Reload_Button.Visible = true;
         }
+
+        #region Click - MouseMove
+
+        private void Exit_Button_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void Reload_Button_Click(object sender, EventArgs e)
+        {
+            Application.Restart();
+        }
+
+        private void GitHub_Label_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/MbarekTR/It-s-snowing");
+        }
+
+        private void Hide_Button_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void Snow_Button_Click(object sender, EventArgs e)
+        {
+            if (Snow_Button.Checked == true) frm.Show();
+            else frm.Hide();
+        }
+
+        private void Control_MouseMove(object sender, MouseEventArgs e)
+        {
+            ReleaseCapture();
+            SendMessage(this.Handle, 0x112, 0xf012, 0);
+        }
+        #endregion
     }
 }
